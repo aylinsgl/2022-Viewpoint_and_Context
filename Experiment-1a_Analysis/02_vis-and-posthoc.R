@@ -10,7 +10,7 @@
 # Date: 18.03.2022
 
 if (!require("pacman")) install.packages("pacman")
-p_load("dplyr","ggplot2","emmeans","remef","Rmisc")
+p_load("dplyr","ggplot2","emmeans","remef","Rmisc","ggeffects")
 
 # functions
 source("src/01_mixed-models_functions.R")
@@ -74,6 +74,9 @@ tiff("plots/acc_adjusted-badsrem_outrem.png", units="in", width=10, height=8, re
 b# insert ggplot code
 dev.off()
 
+#----Plot marginal effects with ggeffects----
+ggpredict(acc.model.3, terms=c("angle [all]","match")) %>% plot()
+
 #----RT----
 # with bads removed
 data <- prepare_for_model(data_type="badsrem", RT=TRUE)
@@ -121,3 +124,5 @@ tiff("plots/processed_badsrem-rt_adjusted.png", units="in", width=10, height=8, 
 d# insert ggplot code
 dev.off()
 
+#----Plot marginal effects with ggeffects----
+ggpredict(rt.model, terms=c("angle [all]","match","movable")) %>% plot()

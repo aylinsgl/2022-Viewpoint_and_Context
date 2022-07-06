@@ -10,7 +10,7 @@
 # Date: 01.04.2022
 
 if (!require("pacman")) install.packages("pacman")
-p_load("dplyr","ggplot2","emmeans","remef")
+p_load("dplyr","ggplot2","emmeans","remef","ggeffects")
 
 # functions
 source("src/01_mixed-models_functions.R")
@@ -80,6 +80,9 @@ agg_data_adj <- aggregate(data=data, correct_acc_model5~sub+rotation+consistency
 tiff("plots/acc_adjusted-badsrem_outrem.png", units="in", width=10, height=8, res=300)
 b# insert ggplot code
 dev.off()
+
+#----Plot marginal effects with ggeffects----
+ggpredict(acc.model.5, terms=c("consistency","rotation")) %>% plot()
 
 #----RT----
 # with bads removed
