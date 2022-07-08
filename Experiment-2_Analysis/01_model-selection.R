@@ -21,73 +21,59 @@ p_load("dplyr","lmerTest")
 data <- prepare_for_model(data_type="badsrem_outrem")
 
 # Find RE structure
-summary(acc.model <- glmer(correct ~ rotation*consistency*movable + # fixed effects
-                             (1 + rotation + consistency + movable | sub) +
-                             (1 + rotation + consistency| imgID), # random effects
-                           family = binomial(),
-                           control=glmerControl(optimizer="bobyqa"),
-                           data = data))
-summary(rePCA(acc.model)) #deprecate
-summary(acc.model.2 <- glmer(correct ~ rotation*consistency*movable + # fixed effects
-                             (1 + consistency + movable | sub) +
+summary(acc.model <- glmer(correct ~ rotation*consistency + # fixed effects
+                             (1 + rotation + consistency | sub) +
                              (1 + rotation + consistency | imgID), # random effects
                            family = binomial(),
                            control=glmerControl(optimizer="bobyqa"),
                            data = data))
-anova(acc.model, acc.model.2)
+summary(rePCA(acc.model)) #deprecate
+summary(acc.model.2 <- glmer(correct ~ rotation*consistency + # fixed effects
+                             (1 + consistency | sub) +
+                             (1 + rotation + consistency | imgID), # random effects
+                           family = binomial(),
+                           control=glmerControl(optimizer="bobyqa"),
+                           data = data))
+anova(acc.model, acc.model.2) #not sig worse
 summary(rePCA(acc.model.2)) #deprecate
-summary(acc.model.3 <- glmer(correct ~ rotation*consistency*movable + # fixed effects
+summary(acc.model.3 <- glmer(correct ~ rotation*consistency + # fixed effects
                                (1 + consistency | sub) +
-                               (1 + rotation + consistency| imgID), # random effects
+                               (1 + rotation | imgID), # random effects
                              family = binomial(),
                              control=glmerControl(optimizer="bobyqa"),
                              data = data))
 anova(acc.model.2,acc.model.3)
 summary(rePCA(acc.model.3)) #deprecate
-summary(acc.model.4 <- glmer(correct ~ rotation*consistency*movable + # fixed effects
-                               (1 + consistency | sub) +
-                               (1 + rotation | imgID), # random effects
-                             family = binomial(),
-                             control=glmerControl(optimizer="bobyqa"),
-                             data = data))
-anova(acc.model.3,acc.model.4)
-summary(rePCA(acc.model.4)) #deprecate
-summary(acc.model.5 <- glmer(correct ~ rotation*consistency*movable + # fixed effects
+summary(acc.model.4 <- glmer(correct ~ rotation*consistency + # fixed effects
                                (1 | sub) +
                                (1 + rotation | imgID), # random effects
                              family = binomial(),
                              control=glmerControl(optimizer="bobyqa"),
                              data = data))
-anova(acc.model.4,acc.model.5)
-summary(rePCA(acc.model.5)) # not deprecate
+anova(acc.model.3,acc.model.4)
+summary(rePCA(acc.model.4)) #not deprecate
 
 # final model
-summary(acc.model.5)
-saveRDS(acc.model.5, "models/acc-model_processed_badsrem_outrem.rds")
+summary(acc.model.4)
+saveRDS(acc.model.4, "models/acc-model_processed_badsrem_outrem.rds")
 
 #----RT----
 #----badsrem Data----
 data <- prepare_for_model(data_type="badsrem", RT = TRUE)
 
 #----Find RE structure----
-summary(rt.model <- lmer(log_RT ~ rotation*consistency*movable + # fixed effects
-                           (1 + rotation + consistency + movable | sub) +
+summary(rt.model <- lmer(log_RT ~ rotation*consistency + # fixed effects
+                           (1 + rotation + consistency | sub) +
                            (1 + rotation + consistency | imgID), # random effects
                          data = data))
 summary(rePCA(rt.model)) # deprecate
-summary(rt.model.2 <- lmer(log_RT ~ rotation*consistency*movable + # fixed effects
-                           (1 + rotation + movable | sub) +
+summary(rt.model.2 <- lmer(log_RT ~ rotation*consistency + # fixed effects
+                           (1 + rotation | sub) +
                            (1 + rotation + consistency | imgID), # random effects
                          data = data))
 anova(rt.model, rt.model.2)
-summary(rePCA(rt.model.2)) # deprecate
-summary(rt.model.3 <- lmer(log_RT ~ rotation*consistency*movable + # fixed effects
-                             (1 + rotation | sub) +
-                             (1 + rotation + consistency | imgID), # random effects
-                           data = data))
-anova(rt.model.2,rt.model.3)
-summary(rePCA(rt.model.3)) # not deprecate
+summary(rePCA(rt.model.2)) # not deprecate
 
 # final model
-summary(rt.model.3)
-saveRDS(rt.model.3, "models/rt-model_processed_badsrem.rds")
+summary(rt.model.2)
+saveRDS(rt.model.2, "models/rt-model_processed_badsrem.rds")

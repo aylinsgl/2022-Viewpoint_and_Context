@@ -21,7 +21,7 @@ dat <- read.csv("data/raw/Rohdaten.csv", header=TRUE, sep=",")
 dat <- dat[dat$matchx == "match",]
 
 # select only relevant variables
-dat <- dplyr::select(dat, sub,consistency,rotation,imgID,imagename,movable,correct,response_time)
+dat <- dplyr::select(dat, sub,consistency,rotation,imgID,imagename,correct,response_time)
 
 #----ACCURACY----
 # Look at distribution of accuracy for the stimuli
@@ -30,8 +30,6 @@ agg_stim <- group_by(dat, imagename, rotation, consistency) %>%
             .groups="keep")
 hist(agg_stim$mean_acc)
 
-# objects that had accuracy below .6 in ANY condition
-(bads <- unique(agg_stim[agg_stim$mean_acc<.6,1:3]))
 # objects that had accuracy below 2.5 mean per condition
 (bads <- find_acc_outliers(dat, by = "image"))
 

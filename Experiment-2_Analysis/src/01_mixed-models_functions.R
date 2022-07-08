@@ -29,10 +29,8 @@ prepare_for_model <- function(data_type, RT=FALSE){
   }
   # change angles to scale from 1-6
   data$consistency <- as.factor(data$consistency)
-  data$movable <- as.factor(data$movable)
   data$rotation <- as.factor(data$rotation)
   contrasts(data$rotation) <- contr.sum(2)
-  contrasts(data$movable) <- contr.sum(2)
   contrasts(data$consistency) <- contr.sum(2)
   return(data)
 }
