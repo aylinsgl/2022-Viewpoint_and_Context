@@ -20,7 +20,8 @@ source("src/01_mixed-models_functions.R")
 source("00_preprocessing.R")
 
 # update ggplot theme
-global_theme <- theme(axis.title=element_text(size=12),
+global_theme <- theme_classic()+
+  theme(axis.title=element_text(size=12),
                       axis.text=element_text(size=10),
                       legend.position = "None")
 
@@ -32,14 +33,16 @@ summary(acc.model)
 
 #----Post-hoc tests----
 (emm_1 <- emmeans(acc.model, pairwise ~ rotation | consistency))
-contrast(emm_1[[1]])
+(emm_2 <- emmeans(acc.model, pairwise ~ consistency | rotation))
 
 (IC_st <- contrast(emm_1[[1]], interaction = "pairwise", by = NULL))
 
 # -> the viewpoint effect is significantly stronger in the inconsistent than the consistent condition
 
 #----PLot adjusted accuracy---- 
-(a <- ggpredict(acc.model, terms=c("consistency","rotation")) %>% plot()+
+(a <- ggpredict(acc.model, terms=c("consistency","rotation")) %>% ggplot(aes(x, predicted, color=group))+
+   geom_point(position=position_dodge(.5))+
+   geom_errorbar(aes(ymax=conf.high, ymin=conf.low), width=.5, position = position_dodge(.5))+
    scale_color_manual(values = c("#56b4e9", "#cc79a7"))+
    xlab("Consistency")+
    ylab("Adjusted Accuracy Predictions")+
@@ -56,8 +59,9 @@ rt.model <- readRDS("models/rt-model_processed_badsrem.rds")
 summary(rt.model)
 
 #----PLot RT---- 
-(b <- ggpredict(rt.model, terms=c("rotation")) %>% plot() +
-   geom_point()+
+(b <- ggpredict(rt.model, terms=c("rotation")) %>% ggplot(aes(x, predicted, color=x)) +
+  geom_point()+
+  geom_errorbar(aes(ymax=conf.high, ymin=conf.low), width=.5)+
   scale_color_manual(values = c("#56b4e9", "#cc79a7"))+
   xlab("Viewpoint")+
   ylab("Adjusted log RT Predictions")+

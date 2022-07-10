@@ -20,7 +20,8 @@ source("src/01_mixed-models_functions.R")
 source("00_preprocessing.R")
 
 # update ggplot axis title theme
-global_theme <- theme(axis.title=element_text(size=12),
+global_theme <- theme_classic()+
+  theme(axis.title=element_text(size=12),
                       axis.text=element_text(size=10),
                       legend.position = "None")
 #---------------------------------------------------------------------------------------------------#
@@ -40,8 +41,10 @@ emtrends(acc.model, pairwise ~ match, var = "angle", max.degree = 2, adjust = "t
 # -> quadratic trend only in match condition
 
 #----Plot marginal effects with ggeffects----
-(a <- ggpredict(acc.model, terms=c("angle [all]","match")) %>% plot()+
+(a <- ggpredict(acc.model, terms=c("angle [all]","match")) %>% ggplot(aes(x, predicted, color=group))+
   geom_point()+
+  geom_path()+
+  geom_ribbon(aes(ymin=conf.low, ymax=conf.high, fill=group), alpha=.3)+
   scale_color_manual(values = c("#999999", "#E69F00"))+
   scale_fill_manual(values = c("#999999", "#E69F00"))+
   scale_x_continuous(labels=c("1" = "0", "2" = "60", "3" = "120", "4" = "180", "5" = "240", "6" = "300"),
@@ -61,7 +64,10 @@ rt.model <- readRDS("models/colour/rt-model_processed_badsrem.rds")
 summary(rt.model)
 
 #----Plot marginal effects with ggeffects----
-(b <- ggpredict(rt.model, terms=c("angle [all]")) %>% plot() +
+(b <- ggpredict(rt.model, terms=c("angle [all]")) %>% ggplot(aes(x, predicted)) +
+  geom_point()+
+  geom_path()+
+  geom_ribbon(aes(ymin=conf.low, ymax=conf.high), fill="grey", alpha=.3)+
   scale_x_continuous(labels=c("1" = "0", "2" = "60", "3" = "120", "4" = "180", "5" = "240", "6" = "300"),
                      breaks = 1:6)+
   xlab("Viewpoint")+
@@ -89,8 +95,10 @@ emtrends(acc.model, pairwise ~ match, var = "angle", max.degree = 2)
 # -> quadratic trend only in match condition
 
 #----Plot marginal effects with ggeffects----
-(c <- ggpredict(acc.model, terms=c("angle [all]","match")) %>% plot()+
+(c <- ggpredict(acc.model, terms=c("angle [all]","match")) %>% ggplot(aes(x, predicted, color=group))+
    geom_point()+
+   geom_path()+
+   geom_ribbon(aes(ymin=conf.low, ymax=conf.high, fill=group), alpha=.3)+
    scale_color_manual(values = c("#999999", "#E69F00"))+
    scale_fill_manual(values = c("#999999", "#E69F00"))+
    scale_x_continuous(labels=c("1" = "0", "2" = "60", "3" = "120", "4" = "180", "5" = "240", "6" = "300"),
@@ -110,7 +118,10 @@ rt.model <- readRDS("models/grey/rt-model_processed_badsrem_inverse.rds")
 summary(rt.model)
 
 #----Plot marginal effects with ggeffects----
-(d <- ggpredict(rt.model, terms=c("angle [all]")) %>% plot() +
+(d <- ggpredict(rt.model, terms=c("angle [all]")) %>% ggplot(aes(x, predicted)) +
+   geom_point()+
+   geom_path()+
+   geom_ribbon(aes(ymin=conf.low, ymax=conf.high), fill="grey", alpha=.3)+
    scale_x_continuous(labels=c("1" = "0", "2" = "60", "3" = "120", "4" = "180", "5" = "240", "6" = "300"),
                       breaks = 1:6)+
    xlab("Viewpoint")+
