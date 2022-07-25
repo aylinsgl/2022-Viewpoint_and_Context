@@ -34,6 +34,7 @@ summary(acc.model)
 #----Post-hoc tests----
 (emm_1 <- emmeans(acc.model, pairwise ~ rotation | consistency))
 (emm_2 <- emmeans(acc.model, pairwise ~ consistency | rotation))
+(emm_2 <- emmeans(acc.model, pairwise ~ consistency * rotation))
 
 (IC_st <- contrast(emm_1[[1]], interaction = "pairwise", by = NULL))
 
