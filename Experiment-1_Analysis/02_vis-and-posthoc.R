@@ -111,10 +111,10 @@ tiff("plots/grey/acc_adjusted-badsrem_outrem.png", units="cm", width=10, height=
 c# insert ggplot code
 dev.off()
 
-#----RT (inverse)----
+#----RT (log)----
 # with bads removed
 data <- prepare_for_model(experiment="grey",data_type="badsrem", RT=TRUE)
-rt.model <- readRDS("models/grey/rt-model_processed_badsrem_inverse.rds")
+rt.model <- readRDS("models/grey/rt-model_processed_badsrem_log.rds")
 summary(rt.model)
 
 #----Plot marginal effects with ggeffects----
@@ -125,7 +125,7 @@ summary(rt.model)
    scale_x_continuous(labels=c("1" = "0", "2" = "60", "3" = "120", "4" = "180", "5" = "240", "6" = "300"),
                       breaks = 1:6)+
    xlab("Viewpoint")+
-   ylab("Adjusted Inverse RT Predictions")+
+   ylab("Adjusted log RT Predictions")+
    ggtitle("")+
    global_theme)
 tiff("plots/grey/rt_adjusted-badsrem_outrem.png", units="cm", width=10, height=8, res=300)

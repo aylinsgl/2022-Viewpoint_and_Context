@@ -93,7 +93,7 @@ saveRDS(acc.model, "models/grey/acc-model_processed_badsrem_outrem.rds")
 data <- prepare_for_model(experiment="grey", data_type="badsrem", RT = TRUE)
 
 #----Find RE structure----
-summary(rt.model <- lmer(inverse_RT ~ poly(angle,2)*match + # fixed effects
+summary(rt.model <- lmer(log_RT ~ poly(angle,2)*match + # fixed effects
                            (1 + match | sub) +
                            (1 + match | imgID), # random effects
                          data = data))
@@ -101,4 +101,4 @@ summary(rePCA(rt.model)) # is not deprecate
 
 # final model:
 summary(rt.model)
-saveRDS(rt.model, "models/grey/rt-model_processed_badsrem_inverse.rds")
+saveRDS(rt.model, "models/grey/rt-model_processed_badsrem_log.rds")

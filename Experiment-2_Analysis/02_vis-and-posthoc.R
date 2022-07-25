@@ -10,7 +10,7 @@
 # Date: 01.04.2022
 
 if (!require("pacman")) install.packages("pacman")
-p_load("dplyr","ggplot2","emmeans","remef","ggeffects")
+p_load("dplyr","ggplot2","emmeans","remef","ggeffects","Rmisc")
 
 # functions
 source("src/01_mixed-models_functions.R")
@@ -50,6 +50,30 @@ summary(acc.model)
    global_theme)
 tiff("plots/acc_adjusted-badsrem_outrem.png", units="cm", width=10, height=8, res=300)
 a# insert ggplot code
+dev.off()
+
+#----PLot difference score---- 
+data_diff <- data %>% group_by(sub, consistency, rotation) %>%
+  summarise(mean_acc = mean(correct),
+            .groups="keep") %>%
+  ungroup() %>%
+  group_by(sub, consistency) %>%
+  mutate(diff_rot = mean_acc[rotation=="canon"]-mean_acc[rotation=="noncanon"]) %>%
+  summarise(diff = mean(diff_rot),
+            .groups="keep")
+
+(x <- ggplot(data_diff, aes(x=consistency, y=diff))+
+  geom_violin(aes(fill=consistency), alpha=.4)+
+    geom_boxplot(width=.2)+
+    geom_point(alpha=.1)+
+    geom_line(aes(group=sub), alpha=.2)+
+    stat_summary(fun = "median", colour = "black", size = 2, geom = "point")+
+    xlab("Scene Consistency")+
+    ylab("Difference Score \n (canonical vs. non-canonical)")+
+    scale_fill_manual(values = c("#56b4e9", "#cc79a7"))+
+    global_theme)
+tiff("plots/acc_diffplot.png", units="cm", width=10, height=8, res=300)
+x# insert ggplot code
 dev.off()
 
 #----RT----
