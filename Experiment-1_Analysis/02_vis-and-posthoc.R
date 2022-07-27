@@ -33,6 +33,8 @@ global_theme <- theme_classic()+
 data <- prepare_for_model(experiment="colour", data_type="badsrem_outrem")
 acc.model <- readRDS("models/colour/acc-model_processed_badsrem_outrem.rds")
 summary(acc.model)
+mean(data$correct)
+sd(data$correct)
 
 #----Post-hoc tests----
 # poly2 : match interaction
@@ -87,6 +89,8 @@ dev.off()
 data <- prepare_for_model(experiment="grey",data_type="badsrem_outrem")
 acc.model <- readRDS("models/grey/acc-model_processed_badsrem_outrem.rds")
 summary(acc.model)
+mean(data$correct)
+sd(data$correct)
 
 #----Post-hoc tests----
 # poly2 : match interaction
