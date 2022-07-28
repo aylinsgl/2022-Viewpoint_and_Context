@@ -55,20 +55,23 @@ dev.off()
 
 #----PLot difference score---- 
 data_diff <- data %>% group_by(sub, consistency, rotation) %>%
-  summarise(mean_acc = mean(correct),
+  dplyr::summarise(mean_acc = mean(correct),
             .groups="keep") %>%
   ungroup() %>%
   group_by(sub, consistency) %>%
-  mutate(diff_rot = mean_acc[rotation=="canon"]-mean_acc[rotation=="noncanon"]) %>%
-  summarise(diff = mean(diff_rot),
+  dplyr::mutate(diff_rot = mean_acc[rotation=="canon"]-mean_acc[rotation=="noncanon"]) %>%
+  dplyr::summarise(diff = mean(diff_rot),
             .groups="keep")
+table <- summarySEwithin(data = data_diff, measurevar = "diff", withinvars = "consistency")
 
 (x <- ggplot(data_diff, aes(x=consistency, y=diff))+
   geom_violin(aes(fill=consistency), alpha=.4)+
-    geom_boxplot(width=.2)+
     geom_point(alpha=.1)+
-    geom_line(aes(group=sub), alpha=.2)+
-    stat_summary(fun = "median", colour = "black", size = 2, geom = "point")+
+    geom_line(aes(group=sub, color=as.factor(sub)), alpha=.5)+
+    #stat_summary(fun = "mean", colour = "black", size = 2, geom = "point")+
+    geom_point(data=table, size=2)+
+    geom_errorbar(data=table, aes(ymin=diff-se, ymax=diff+se), width=.1)+
+    geom_line(data=table, aes(group=1))+
     xlab("Scene Consistency")+
     ylab("Difference Score \n (canonical vs. non-canonical)")+
     scale_fill_manual(values = c("#56b4e9", "#cc79a7"))+
