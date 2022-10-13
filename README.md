@@ -1,4 +1,6 @@
-# Data and code for [Viewpoint and Context] experiments
+# Viewpoint-Dependence and Object-Scene Processing Effects Generalize to Depth Rotated 3D Objects.
+
+**Data and Code**
 
 For each experiment the folder structure is as follows
 
@@ -17,3 +19,5 @@ Experiment
 ```
 
 Double click the .Rproj file to open the project in R.
+
+Authors: Aylin Kallmayer, Melissa L.-H. Võ, & Dejan Draschkow
