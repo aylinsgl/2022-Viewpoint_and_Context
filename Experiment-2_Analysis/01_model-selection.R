@@ -2,16 +2,17 @@
 #     model_selection           #
 #################################
 # This script does:
-# finds random effects structure
-# for chosen version of preprocessed data
+# finds random effects structure for (g)lmm
+# and saves final models in models/
+#
 # Author: Aylin Kallmayer
-# Date: 01.04.2022
+# Year: 2022
 
 # load functions
 source("src/01_mixed-models_functions.R")
 
 # run to preprocess new data
-source("00_preprocessing.R")
+# source("00_preprocessing.R")
 
 if (!require("pacman")) install.packages("pacman")
 p_load("dplyr","lmerTest")

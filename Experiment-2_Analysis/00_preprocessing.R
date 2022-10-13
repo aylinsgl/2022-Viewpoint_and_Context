@@ -2,13 +2,12 @@
 #        Preprocessing          #
 #################################
 # This script does:
-# 1) checks if any objects produced accuracy below .6
-# 2) creates files with and without bad objects for accuracy and RT
-# 3) checks for accuracy participant outliers
-# 4) box cox transformation for RT data
-
+# 1) outlier detection
+# 2) box cox transformation for RT data
+# 3) saves preprocessed files to data/processed/ 
+#
 # Author: Aylin Kallmayer
-# Date: 01.04.2022
+# Year: 2022
 
 source("src/00_preprocessing-functions.R")
 

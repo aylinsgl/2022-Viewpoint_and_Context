@@ -2,10 +2,15 @@
 #        plots & post-hoc       #
 #################################
 # This script does:
-# 3) post-hoc tests
-# 1) creates accuracy and rt plots
-# 2) creates model adjusted accuracy and rt plots
-
+# 1) post-hoc tests
+# 2) accuracy and rt plots
+# 3) model adjusted accuracy and rt plots
+#
+# saves plots to plots/ and respective experiment
+# folders
+# color = Experiment 1a
+# grey = Experiment 1b
+#
 # Author: Aylin Kallmayer
 # Year: 2022
 
@@ -17,7 +22,7 @@ source("src/01_mixed-models_functions.R")
 
 #----Preprocess----
 # run to preprocess new data
-source("00_preprocessing.R")
+# source("00_preprocessing.R")
 
 # update ggplot axis title theme
 global_theme <- theme_classic()+
@@ -25,13 +30,13 @@ global_theme <- theme_classic()+
                       axis.text=element_text(size=10),
                       legend.position = "None")
 #---------------------------------------------------------------------------------------------------#
-#----EXPERIMENT 1A: COLOUR----
+#----EXPERIMENT 1A: color----
 #---------------------------------------------------------------------------------------------------#
 
 #----ACCURACY----
 # with out badsrem data
-data <- prepare_for_model(experiment="colour", data_type="badsrem_outrem")
-acc.model <- readRDS("models/colour/acc-model_processed_badsrem_outrem.rds")
+data <- prepare_for_model(experiment="color", data_type="badsrem_outrem")
+acc.model <- readRDS("models/color/acc-model_processed_badsrem_outrem.rds")
 summary(acc.model)
 mean(data$correct)
 sd(data$correct)
@@ -55,14 +60,14 @@ emtrends(acc.model, pairwise ~ match, var = "angle", max.degree = 2, adjust = "t
   ylab("Adjusted Accuracy Predictions")+
   ggtitle("")+
   global_theme)
-tiff("plots/colour/acc_adjusted-badsrem_outrem.png", units="cm", width=10, height=8, res=300)
+tiff("plots/color/acc_adjusted-badsrem_outrem.png", units="cm", width=10, height=8, res=300)
 a# insert ggplot code
 dev.off()
 
 #----RT----
 # with bads removed
-data <- prepare_for_model(experiment="colour",data_type="badsrem", RT=TRUE)
-rt.model <- readRDS("models/colour/rt-model_processed_badsrem.rds")
+data <- prepare_for_model(experiment="color",data_type="badsrem", RT=TRUE)
+rt.model <- readRDS("models/color/rt-model_processed_badsrem.rds")
 summary(rt.model)
 
 #----Plot marginal effects with ggeffects----
@@ -76,7 +81,7 @@ summary(rt.model)
   ylab("Adjusted log RT Predictions")+
   ggtitle("")+
   global_theme)
-tiff("plots/colour/rt_adjusted-badsrem_outrem.png", units="cm", width=10, height=8, res=300)
+tiff("plots/color/rt_adjusted-badsrem_outrem.png", units="cm", width=10, height=8, res=300)
 b# insert ggplot code
 dev.off()
 

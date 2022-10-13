@@ -2,8 +2,12 @@
 #     model_selection           #
 #################################
 # This script does:
-# finds random effects structure
-# for chosen version of preprocessed data
+# finds random effects structure for (g)lmm
+# and saves final models in models/ and the respective 
+# experiment folders
+# color = Experiment 1a
+# grey = Experiment 1b
+#
 # Author: Aylin Kallmayer
 # Year: 2022
 
@@ -11,18 +15,18 @@
 source("src/01_mixed-models_functions.R")
 
 # run to preprocess new data
-source("00_preprocessing.R")
+# source("00_preprocessing.R")
 
 if (!require("pacman")) install.packages("pacman")
 p_load("dplyr","lmerTest")
 
 #---------------------------------------------------------------------------------------------------#
-#----EXPERIMENT 1A: COLOUR----
+#----EXPERIMENT 1A: COLOR----
 #---------------------------------------------------------------------------------------------------#
 
 #----ACCURACY----
 #----badsrem outrem data----
-data <- prepare_for_model(experiment="colour",data_type="badsrem_outrem")
+data <- prepare_for_model(experiment="color",data_type="badsrem_outrem")
 
 # Find RE structure
 summary(acc.model <- glmer(correct ~ poly(angle,2)*match + # fixed effects
@@ -50,11 +54,11 @@ anova(acc.model.2,acc.model.3) # sig worse, keep model 2
 
 # final model:
 summary(acc.model.2)
-saveRDS(acc.model.2, "models/colour/acc-model_processed_badsrem_outrem.rds")
+saveRDS(acc.model.2, "models/color/acc-model_processed_badsrem_outrem.rds")
 
 #----RT----
 #----badsrem Data----
-data <- prepare_for_model(experiment="colour",data_type="badsrem", RT = TRUE)
+data <- prepare_for_model(experiment="color",data_type="badsrem", RT = TRUE)
 
 #----Find RE structure----
 summary(rt.model <- lmer(log_RT ~ poly(angle,2)*match + # fixed effects
@@ -65,7 +69,7 @@ summary(rePCA(rt.model)) # not deprecate
 
 # final model:
 summary(rt.model)
-saveRDS(rt.model, "models/colour/rt-model_processed_badsrem.rds")
+saveRDS(rt.model, "models/color/rt-model_processed_badsrem.rds")
 
 #---------------------------------------------------------------------------------------------------#
 #----EXPERIMENT 1B: GREY----

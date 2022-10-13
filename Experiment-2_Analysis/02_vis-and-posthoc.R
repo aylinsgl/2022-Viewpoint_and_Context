@@ -1,13 +1,13 @@
 #################################
-#        Mixed modelling        #
+#        plots & post-hoc       #
 #################################
 # This script does:
-# 3) post-hoc tests
-# 1) creates accuracy and rt plots
-# 2) creates model adjusted accuracy and rt plots
-
+# 1) post-hoc tests
+# 2) accuracy and rt plots
+# 3) model adjusted accuracy and rt plots
+#
 # Author: Aylin Kallmayer
-# Date: 01.04.2022
+# Year: 2022
 
 if (!require("pacman")) install.packages("pacman")
 p_load("dplyr","ggplot2","emmeans","remef","ggeffects","Rmisc")
@@ -17,7 +17,7 @@ source("src/01_mixed-models_functions.R")
 
 #----Preprocess----
 # run to preprocess new data
-source("00_preprocessing.R")
+# source("00_preprocessing.R")
 
 # update ggplot theme
 global_theme <- theme_classic()+
