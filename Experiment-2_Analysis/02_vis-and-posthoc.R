@@ -66,12 +66,13 @@ table <- summarySEwithin(data = data_diff, measurevar = "diff", withinvars = "co
 
 (x <- ggplot(data_diff, aes(x=consistency, y=diff))+
   geom_violin(aes(fill=consistency), alpha=.4)+
+    geom_boxplot(width=.3)+
     geom_point(alpha=.1)+
     geom_line(aes(group=sub, color=as.factor(sub)), alpha=.5)+
     #stat_summary(fun = "mean", colour = "black", size = 2, geom = "point")+
-    geom_point(data=table, size=2)+
-    geom_errorbar(data=table, aes(ymin=diff-se, ymax=diff+se), width=.1)+
-    geom_line(data=table, aes(group=1))+
+    #geom_point(data=table, size=2)+
+    #geom_errorbar(data=table, aes(ymin=diff-se, ymax=diff+se), width=.1)+
+    #geom_line(data=table, aes(group=1))+
     xlab("Scene Consistency")+
     ylab("Difference Score \n (canonical vs. non-canonical)")+
     scale_fill_manual(values = c("#56b4e9", "#cc79a7"))+
@@ -97,4 +98,23 @@ summary(rt.model)
   global_theme)
 tiff("plots/rt_adjusted-badsrem_outrem.png", units="cm", width=10, height=8, res=300)
 b# insert ggplot code
+dev.off()
+
+# adj violin plot
+data$RT_adj <- keepef(rt.model, fix=c("rotation1","consistency1"), keep.intercept = FALSE)
+table <- aggregate(data=data, RT_adj ~ sub+rotation+consistency, mean) %>%
+  arrange(consistency, sub)%>%
+  mutate(group=rep(1:64, each=2))
+(c <- ggplot(table, aes(x=consistency, y=RT_adj, fill=rotation))+
+  geom_violin(alpha=.4)+
+    geom_boxplot(position = position_dodge(.9), width=.3, fill="white", aes(color=rotation))+
+    scale_color_manual(values=c("black","black"))+
+    xlab("Scene Consistency")+
+    ylab("Adjusted Response Time")+
+    geom_point(alpha=.1,aes(color=as.factor(rotation)), position=position_dodge(.9), 
+               color="black")+
+    scale_fill_manual(values = c("grey", "black"))+
+    global_theme)
+png("plots/rt_adjusted-badsrem_outrem.png", units="cm", width=10, height=8, res=300)
+c# insert ggplot code
 dev.off()

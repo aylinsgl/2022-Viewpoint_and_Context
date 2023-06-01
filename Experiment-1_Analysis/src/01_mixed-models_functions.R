@@ -7,7 +7,7 @@
 # Date: 18.03.2022
 
 #----PROCESSED DATA----#
-prepare_for_model <- function(experiment, data_type, RT=FALSE){
+prepare_for_model <- function(experiment,data_type, RT=FALSE){
 #  processed = nothing removed
 #  badsrem = removed bad stimuli
 #  badsrem_outrem = removed bads and outliers

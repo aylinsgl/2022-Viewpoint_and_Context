@@ -15,7 +15,7 @@
 # Year: 2022
 
 if (!require("pacman")) install.packages("pacman")
-p_load("dplyr","ggplot2","emmeans","remef","Rmisc","ggeffects")
+p_load("dplyr","ggplot2","emmeans","remef","Rmisc","ggeffects","data.table")
 
 # functions
 source("src/01_mixed-models_functions.R")
@@ -40,6 +40,25 @@ acc.model <- readRDS("models/color/acc-model_processed_badsrem_outrem.rds")
 summary(acc.model)
 mean(data$correct)
 sd(data$correct)
+
+#----Plotting non-canonical distributions----
+agg_objs <- aggregate(data=data, correct~imagename+rotation+match, mean) %>%
+  filter(match=="match")
+(a <- ggplot(agg_objs, aes(x=as.factor(rotation), y=correct, color=match))+
+    scale_color_manual(values = c("#999999", "#E69F00"))+
+    geom_path(alpha=.3, aes(group=imagename))+
+    geom_path(data=filter(agg_objs, imagename=="028_Wasserkocher_retroWasserkocher"),aes(group=1),size=1,color="orange",alpha=1)+
+    geom_path(data=filter(agg_objs, imagename=="037_Mixer_Standmixer"),aes(group=1),size=1,color="blue",alpha=1)+
+    geom_path(data=filter(agg_objs, imagename=="079_Tisch_Schreibtisch"),aes(group=1),size=1,color="purple",alpha=1)+
+    xlab("Viewpoint")+
+    ylab("Accuracy")+
+    ylim(c(0,1))+
+    global_theme)
+# plot
+png("plots/color/acc_obj_distr.png", units="cm", width=10, height=8, res=300)
+a# insert ggplot code
+dev.off()
+
 
 #----Post-hoc tests----
 # poly2 : match interaction
@@ -69,6 +88,9 @@ dev.off()
 data <- prepare_for_model(experiment="color",data_type="badsrem", RT=TRUE)
 rt.model <- readRDS("models/color/rt-model_processed_badsrem.rds")
 summary(rt.model)
+mean(data$response_time)
+sd(data$response_time)
+
 
 #----Plot marginal effects with ggeffects----
 (b <- ggpredict(rt.model, terms=c("angle [all]")) %>% ggplot(aes(x, predicted)) +
@@ -97,7 +119,25 @@ summary(acc.model)
 mean(data$correct)
 sd(data$correct)
 
-#----Post-hoc tests----
+#----Plotting non-canonical distributions----
+agg_objs <- aggregate(data=data, correct~imagename+rotation+match, mean) %>%
+  filter(match=="match")
+
+(a <- ggplot(agg_objs, aes(x=as.factor(rotation), y=correct, color=match))+
+    scale_color_manual(values = c("#999999", "#E69F00"))+
+    geom_path(alpha=.3, aes(group=imagename))+
+    geom_path(data=filter(agg_objs, imagename=="028_Wasserkocher_retroWasserkocher"),aes(group=1),size=1,color="orange",alpha=1)+
+    geom_path(data=filter(agg_objs, imagename=="037_Mixer_Standmixer"),aes(group=1),size=1,color="blue",alpha=1)+
+    geom_path(data=filter(agg_objs, imagename=="079_Tisch_Schreibtisch"),aes(group=1),size=1,color="purple",alpha=1)+
+    xlab("Viewpoint")+
+    ylab("Accuracy")+
+    ylim(c(0,1))+
+    global_theme)
+# plot
+png("plots/grey/acc_obj_distr.png", units="cm", width=10, height=8, res=300)
+a# insert ggplot code
+dev.off()
+
 # poly2 : match interaction
 emtrends(acc.model, pairwise ~ match, var = "angle", max.degree = 2)
 # -> sig difference between match mismatch for quadratic degree
@@ -125,6 +165,8 @@ dev.off()
 data <- prepare_for_model(experiment="grey",data_type="badsrem", RT=TRUE)
 rt.model <- readRDS("models/grey/rt-model_processed_badsrem_log.rds")
 summary(rt.model)
+mean(data$response_time)
+sd(data$response_time)
 
 #----Plot marginal effects with ggeffects----
 (d <- ggpredict(rt.model, terms=c("angle [all]")) %>% ggplot(aes(x, predicted)) +
