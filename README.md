@@ -1,6 +1,6 @@
 # Viewpoint-Dependence and Object-Scene Processing Effects Generalize to Depth Rotated 3D Objects.
 
-## Data and Code
+## Data, Code, and Stimuli
 
 For each experiment the folder structure is as follows
 
